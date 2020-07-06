@@ -6,8 +6,6 @@ description: >-
 
 # 💻 Sunucu Yönetimi
 
-## 
-
 ## 🔌 Sunucuya Bağlanma
 
 * `ssh -l <username> <ip>` veya `ssh <user>:<IP>` komutu ile sunucuya bağlanılır ve şifre girilir
