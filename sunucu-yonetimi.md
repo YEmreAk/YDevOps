@@ -28,7 +28,8 @@ description: >-
 
 $USER = Read-Host 'Username'
 $IP = Read-Host 'IP adress'
-$KEY_PATH = Read-Host 'Key path (./.ssh/id_rsa)'
+$KEY_ID = Read-Host 'Key ID'
+$KEY_PATH = "./.ssh/${KEY_ID}_ecdsa"
 ssh-keygen -t ecdsa -b 521 -f ${KEY_PATH}
 Get-Service -Name ssh-agent | Set-Service -StartupType Manual
 Start-Service ssh-agent
@@ -52,11 +53,12 @@ ssh ${USER}@${IP} "\
 
 read -p 'Username: ' USER
 read -p 'IP adress: ' IP
-read -p 'Key path (./.ssh/id_rsa): ' KEY_PATH
+read -p 'Key ID: : ' KEY_ID
+KEY_PATH="./.ssh/${KEY_ID}_ecdsa"
 ssh-keygen -t ecdsa -b 521 -f ${KEY_PATH}
 ssh ${USER}@${IP} "\
     mkdir -p ~/.ssh && \
-    echo \"`cat ~/.ssh/id_rsa.pub`\" && \
+    echo \"`cat ${KEY_PATH}.pub`\" && \
     chmod 700 ~/.ssh && \
     chmod 600 ~/.ssh/authorized_keys"
 ```
@@ -77,8 +79,8 @@ ssh ${USER}@${IP} "\
   * Sunucu bağlantılarında bu anahtar deposu kullanılır
 * 🚚 `ssh ${USER}@${IP} "\` komutunu yazın ve ardından alttaki komutları girin
   * 📂`mkdir -p ~/.ssh && \` ile sunucuda `ssh`antahtarları dizini yoksa oluşturun
-  * ➕`echo (Get-Content ~/${KEY_PATH}.pub) >> .ssh/authorized_keys && \` ile açık anahtarınızı sunucuda onaylı anahtar listesine ekleyin
-  * 🐧`echo \"cat ~/.ssh/id_rsa.pub\" && \` komutu ile **Linux işletim sistemini kullananlar** açık anahtarı ekleyebilir
+  * ➕`echo (Get-Content ${KEY_PATH}.pub) >> .ssh/authorized_keys && \` ile açık anahtarınızı sunucuda onaylı anahtar listesine ekleyin
+  * 🐧`echo \"cat ${KEY_PATH}.pub\" && \` komutu ile **Linux işletim sistemini kullananlar** açık anahtarı ekleyebilir
   * 👮‍♂️ `chmod 700 ~/.ssh && \` komutu ile `ssh`dizinini yetkilendirin
   * 👮‍♂️ `chmod 600 ~/.ssh/authorized_keys"` komutu ile anahtarların olduğu dosyaya okunabilmesi için izinleri verin
 
